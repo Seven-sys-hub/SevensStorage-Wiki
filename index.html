@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seven's Storage</title>
+<meta name="description" content="Seven's Storage: the claim-based virtual storage network for Afterlife Zombies. Player guide, crafting recipes and rank limits.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1019; --panel:#111a28; --panel2:#16223a; --line:#24344f; --text:#dbe4f0; --muted:#8ea0b8;
+  --cyan:#3fd0ff; --cyan2:#9be8ff; --amber:#ffb547; --red:#ff5d6c; --green:#5be39a; --purple:#c79bff;
+  --mc-panel:#c6c6c6; --mc-slot:#8b8b8b;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:20px}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,system-ui,sans-serif}
+a{color:var(--cyan)} a:hover{color:var(--cyan2)}
+code,pre{font-family:"JetBrains Mono",ui-monospace,monospace}
+code{background:#0d1626;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:.88em;color:var(--cyan2);overflow-wrap:anywhere}
+pre{background:#0b1322;border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow:auto;font-size:.85em;line-height:1.55;color:#cfe3f5}
+pre code{background:none;border:0;padding:0;color:inherit;overflow-wrap:normal}
+.c{color:#6f86a3}.k{color:var(--cyan)}.v{color:var(--amber)}
+
+/* layout */
+.wrap{display:grid;grid-template-columns:270px 1fr;min-height:100vh}
+nav{position:sticky;top:0;height:100vh;overflow:auto;background:#0c1422;border-right:1px solid var(--line);padding:22px 16px}
+.brand{font-family:Orbitron,Inter,sans-serif;font-weight:800;color:var(--cyan);font-size:20px;letter-spacing:.5px;text-decoration:none;display:block}
+.brand small{display:block;font:500 12px Inter;color:var(--muted);letter-spacing:0;margin-top:2px}
+#q{width:100%;margin:16px 0 10px;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:#0a1220;color:var(--text);font:14px Inter}
+#q:focus{outline:none;border-color:var(--cyan)}
+nav h4{font:600 11px Inter;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);margin:18px 6px 6px}
+nav a{display:block;padding:5px 10px;border-radius:6px;color:#b9c7da;text-decoration:none;font-size:14px}
+nav a:hover,nav a.on{background:var(--panel2);color:var(--cyan2)}
+nav a.hide{display:none}
+main{padding:0 48px 80px;max-width:1100px;min-width:0}
+.menu-btn{display:none}
+
+/* hero */
+.hero{padding:56px 0 34px;border-bottom:1px solid var(--line);margin-bottom:10px;position:relative}
+.hero h1{font-family:Orbitron,Inter,sans-serif;font-weight:800;font-size:46px;margin:0;color:var(--cyan);letter-spacing:1px;text-shadow:0 0 30px rgba(63,208,255,.25)}
+.hero p.lead{font-size:19px;color:#c3d0e2;max-width:760px;margin:12px 0 18px}
+.tags span{display:inline-block;margin:0 6px 6px 0;padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:13px;color:var(--cyan2)}
+.ascii{font:12px/1.15 "JetBrains Mono",monospace;color:#2f6f8d;white-space:pre;margin:0 0 18px;overflow:hidden}
+
+section{padding-top:30px}
+h2{font:700 28px Inter;margin:24px 0 10px;color:#f2f6fb;display:flex;align-items:center;gap:10px}
+h2 .n{font:600 13px "JetBrains Mono";color:var(--cyan);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+h3{font:600 20px Inter;margin:26px 0 8px;color:var(--cyan2)}
+.pill{display:inline-block;font:600 11px Inter;letter-spacing:.8px;text-transform:uppercase;padding:2px 8px;border-radius:5px;margin-left:6px;vertical-align:middle}
+.p-player{background:#123447;color:var(--cyan2)}.p-admin{background:#3a1d2a;color:#ffb3c0}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:14px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.card h4{margin:0 0 4px;font:600 17px Inter;color:#f2f6fb}
+.card .how{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.card p{margin:8px 0 0;font-size:14.5px;color:#c0cddd}
+.note,.warn,.tip{border-radius:10px;padding:12px 16px;margin:14px 0;font-size:15px;border:1px solid}
+.note{background:#0f2133;border-color:#1f4766}
+.tip{background:#0f2a22;border-color:#1f5c45}
+.warn{background:#2e1c12;border-color:#6b4422}
+.note b:first-child,.tip b:first-child,.warn b:first-child{color:#fff}
+
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px;background:var(--panel);border-radius:10px;overflow:hidden}
+th,td{padding:10px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--panel2);color:var(--cyan2);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.6px}
+tr:last-child td{border-bottom:0}
+td.num{font-family:"JetBrains Mono";color:var(--amber);white-space:nowrap}
+ol.steps{counter-reset:s;list-style:none;padding:0}
+ol.steps li{counter-increment:s;position:relative;padding:4px 0 10px 44px}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:3px;width:30px;height:30px;border-radius:50%;background:var(--panel2);border:1px solid var(--cyan);color:var(--cyan);font:600 14px Inter;display:grid;place-items:center}
+.lights span{display:inline-flex;align-items:center;gap:7px;margin-right:18px}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;box-shadow:0 0 10px currentColor}
+
+/* recipes */
+.recipes{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px;margin:16px 0}
+.recipe{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+.recipe h4{margin:0;font:600 18px Inter;color:#f2f6fb}
+.recipe .sub{font-size:13px;color:var(--muted);margin-bottom:12px}
+.table{display:flex;align-items:center;gap:16px;background:var(--mc-panel);border-radius:6px;padding:12px;width:max-content;max-width:100%}
+.cgrid{display:grid;grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px)}
+.slot{width:46px;height:46px;background:var(--mc-slot);border:3px solid;border-color:#373737 #fff #fff #373737;display:grid;place-items:center}
+.slot img{width:34px;height:34px;image-rendering:pixelated}
+.arrow{width:44px;height:28px;background:#8b8b8b;clip-path:polygon(0 30%,62% 30%,62% 0,100% 50%,62% 100%,62% 70%,0 70%)}
+.result{width:60px;height:60px}
+.cube{width:40px;height:40px}
+.ing{list-style:none;padding:0;margin:12px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:13.5px;color:#c6d3e4}
+.ing li{display:flex;align-items:center;gap:7px}
+.ing img{width:22px;height:22px;image-rendering:pixelated}
+.off{font:600 11px Inter;color:var(--amber);border:1px solid #6b4a1a;border-radius:5px;padding:1px 6px;margin-left:6px}
+.remote-img{max-width:420px;width:100%;border-radius:10px;border:1px solid var(--line);image-rendering:pixelated}
+
+/* network diagram */
+.diagram{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px;margin:14px 0;overflow:auto}
+.diagram svg{display:block;min-width:720px;width:100%;height:auto}
+
+footer{margin-top:60px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+
+@media (max-width:900px){
+  .wrap{grid-template-columns:1fr}
+  nav{position:fixed;inset:0 30% 0 0;z-index:20;transform:translateX(-105%);transition:transform .2s;height:100%}
+  nav.open{transform:none}
+  .menu-btn{display:block;position:fixed;right:16px;top:14px;z-index:30;background:var(--panel2);color:var(--cyan);border:1px solid var(--line);border-radius:8px;padding:8px 12px;font:600 14px Inter}
+  main{padding:0 16px 60px}
+  .hero h1{font-size:32px}
+  .ascii{display:none}
+  table{display:block;overflow-x:auto}
+  .ing{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<button class="menu-btn" onclick="document.querySelector('nav').classList.toggle('open')">☰ Menu</button>
+<div class="wrap">
+<nav>
+  <a class="brand" href="#top">SEVEN'S STORAGE<small>Afterlife Zombies · Made by Seven</small></a>
+  <input id="q" type="search" placeholder="Search the guide…" aria-label="Search">
+  <h4>Guide</h4>
+  <a href="#overview">Overview</a>
+  <a href="#quickstart">Quick start</a>
+  <a href="#parts">All the parts</a>
+  <a href="#controller">Controller &amp; terminal</a>
+  <a href="#modules">Storage modules</a>
+  <a href="#crafting-screen">Crafting from storage</a>
+  <a href="#linker">Wireless Linker</a>
+  <a href="#output">Output nodes</a>
+  <a href="#input">Input nodes &amp; furnaces</a>
+  <a href="#transfer">Transfer nodes</a>
+  <a href="#collector">Collector</a>
+  <a href="#filters">Filters</a>
+  <a href="#crate">Storage Crate</a>
+  <a href="#remote">Storage Remote</a>
+  <a href="#lights">Status lights &amp; colors</a>
+  <a href="#recipes">Crafting recipes</a>
+  <a href="#ranks">Rank limits</a>
+  <a href="#claims">Claims &amp; real estate</a>
+  <a href="#faq">FAQ &amp; troubleshooting</a>
+  <a href="#commands">Commands</a>
+</nav>
+
+<main id="top">
+<header class="hero">
+<div class="ascii">    _    _____ _____ _____ ____  _     ___ _____ _____
+   / \  |  ___|_   _| ____|  _ \| |   |_ _|  ___| ____|
+  / _ \ | |_    | | |  _| | |_) | |    | || |_  |  _|
+ / ___ \|  _|   | | | |___|  _ &lt;| |___ | ||  _| | |___
+/_/   \_\_|     |_| |_____|_| \_\_____|___|_|   |_____|   Made by Seven</div>
+<h1>SEVEN'S STORAGE</h1>
+<p class="lead">A searchable, claim-based storage network for Afterlife Zombies. Store millions of items in one terminal, wire your farms and furnaces into it wirelessly, and replace laggy hopper chains with collectors that cost the server almost nothing.</p>
+<div class="tags"><span>Purpur / Paper 26.3</span><span>Nexo furniture</span><span>GriefPrevention claims</span><span>Java &amp; Bedrock</span><span>Near-zero lag</span></div>
+</header>
+
+<!-- ============================== PLAYERS ============================== -->
+<section id="overview">
+<h2><span class="n">01</span> Overview</h2>
+<p>Every claim can have <b>one Storage Controller</b>. The controller is your storage: it holds items itself, and every <b>Storage Module</b> you connect to it adds more room. Right-click the controller to open the <b>terminal</b>, where you can search everything you own, take items out, put items in, and craft straight from your stock.</p>
+<p>Around the storage you can build a <b>wireless network</b>: nodes that pull items out of chests and farms, feed furnaces, move items between chests, and <b>collectors</b> that pick up drops off the ground. Everything is paired with the <b>Wireless Linker</b> and works up to <b>500 blocks</b> away inside claims.</p>
+<div class="diagram" aria-label="How the parts connect">
+<svg viewBox="0 0 960 360" xmlns="http://www.w3.org/2000/svg" font-family="Inter,sans-serif" font-size="13">
+ <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3fd0ff"/></marker>
+ <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5be39a"/></marker>
+ <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c79bff"/></marker></defs>
+ <g fill="#16223a" stroke="#3fd0ff" stroke-width="1.5">
+  <rect x="380" y="140" width="200" height="80" rx="10"/>
+ </g>
+ <text x="480" y="173" text-anchor="middle" fill="#9be8ff" font-weight="700" font-size="16">Storage Controller</text>
+ <text x="480" y="195" text-anchor="middle" fill="#8ea0b8">terminal · search · crafting</text>
+ <g fill="#111a28" stroke="#24344f" stroke-width="1.5">
+  <rect x="380" y="270" width="200" height="56" rx="8"/>
+  <rect x="30" y="30" width="190" height="56" rx="8"/><rect x="30" y="120" width="190" height="56" rx="8"/>
+  <rect x="30" y="250" width="190" height="56" rx="8"/>
+  <rect x="740" y="30" width="190" height="56" rx="8"/><rect x="740" y="150" width="190" height="56" rx="8"/>
+  <rect x="740" y="270" width="190" height="56" rx="8"/>
+  <rect x="380" y="30" width="200" height="56" rx="8"/>
+ </g>
+ <text x="480" y="294" text-anchor="middle" fill="#f2f6fb" font-weight="600">Storage Modules</text><text x="480" y="313" text-anchor="middle" fill="#8ea0b8">touching chain · +25,000 each</text>
+ <text x="125" y="54" text-anchor="middle" fill="#f2f6fb" font-weight="600">Farm chest + Output Node</text><text x="125" y="73" text-anchor="middle" fill="#8ea0b8">empties the chest</text>
+ <text x="125" y="144" text-anchor="middle" fill="#f2f6fb" font-weight="600">Collector</text><text x="125" y="163" text-anchor="middle" fill="#8ea0b8">picks drops off the ground</text>
+ <text x="125" y="274" text-anchor="middle" fill="#f2f6fb" font-weight="600">Ore / fuel chests</text><text x="125" y="293" text-anchor="middle" fill="#8ea0b8">supply for furnaces</text>
+ <text x="835" y="54" text-anchor="middle" fill="#f2f6fb" font-weight="600">Storage Crate</text><text x="835" y="73" text-anchor="middle" fill="#8ea0b8">filtered items, take-out only</text>
+ <text x="835" y="174" text-anchor="middle" fill="#f2f6fb" font-weight="600">Transfer Node pair</text><text x="835" y="193" text-anchor="middle" fill="#8ea0b8">chest → chest</text>
+ <text x="835" y="294" text-anchor="middle" fill="#f2f6fb" font-weight="600">Furnaces + Input Nodes</text><text x="835" y="313" text-anchor="middle" fill="#8ea0b8">kept topped up</text>
+ <text x="480" y="54" text-anchor="middle" fill="#f2f6fb" font-weight="600">Storage Remote</text><text x="480" y="73" text-anchor="middle" fill="#8ea0b8">opens it from anywhere in the claim</text>
+ <g stroke="#3fd0ff" stroke-width="2" fill="none" stroke-dasharray="6 5">
+  <path d="M220 58 C300 58 320 160 378 168" marker-end="url(#ar)"/>
+  <path d="M220 148 C300 148 320 175 378 178" marker-end="url(#ar)"/>
+  <path d="M480 88 L480 136" marker-end="url(#ar)"/>
+ </g>
+ <path d="M480 268 L480 224" stroke="#3fd0ff" stroke-width="3"/>
+ <g stroke="#c79bff" stroke-width="2" fill="none" stroke-dasharray="6 5">
+  <path d="M220 140 C290 112 330 112 380 112 L640 112 C700 112 700 62 738 60" marker-end="url(#ap)"/>
+ </g>
+ <text x="600" y="104" fill="#c79bff" font-size="12">filtered items</text>
+ <g stroke="#5be39a" stroke-width="2" fill="none" stroke-dasharray="6 5">
+  <path d="M220 278 C450 340 600 320 738 300" marker-end="url(#ag)"/>
+  <path d="M835 206 L835 266" marker-end="url(#ag)"/>
+ </g>
+ <text x="430" y="352" fill="#5be39a" font-size="12">ore + fuel, wireless, up to 500 blocks</text>
+</svg>
+</div>
+<div class="tip"><b>Why it exists:</b> hoppers check for items every tick, and a base full of them is one of the biggest causes of server lag. Seven's Storage does the same jobs from one task that runs once a second, so huge networks cost about as much as a few hoppers.</div>
+</section>
+
+<section id="quickstart">
+<h2><span class="n">02</span> Quick start</h2>
+<ol class="steps">
+<li><b>Claim your land</b> with GriefPrevention. Storage only works inside claims.</li>
+<li><b>Buy a Storage Controller</b> from the Black Market and place it inside your claim.</li>
+<li><b>Craft Storage Modules</b> and place them touching the controller, or touching another module that's connected. Each adds 25,000 items.</li>
+<li><b>Right-click the controller</b> to open the terminal. Click items in your own inventory to put them in; click items in the terminal to take them out.</li>
+<li><b>Grab a Wireless Linker</b> and start wiring up your farms, furnaces and chests (see below).</li>
+</ol>
+</section>
+
+<section id="parts">
+<h2><span class="n">03</span> All the parts</h2>
+<div class="grid">
+ <div class="card"><div class="how">Black Market</div><h4>Storage Controller</h4><p>The brain and terminal. Holds 5,000 items on its own. One per claim.</p></div>
+ <div class="card"><div class="how">Crafted</div><h4>Storage Module</h4><p>Adds 25,000 items each. Place in a touching chain from the controller.</p></div>
+ <div class="card"><div class="how">Crafted</div><h4>Wireless Linker</h4><p>The tool that pairs nodes, chests, collectors and crates.</p></div>
+ <div class="card"><div class="how">Crafted</div><h4>Output Node</h4><p>Sits on a chest or container and sends its contents into storage.</p></div>
+ <div class="card"><div class="how">Crafted</div><h4>Input Node</h4><p>Sits on a furnace and keeps it fed with ore and fuel from your supply chests.</p></div>
+ <div class="card"><div class="how">Crafted</div><h4>Transfer Node</h4><p>Pairs of nodes that move items from one chest to another.</p></div>
+ <div class="card"><div class="how">Crafted</div><h4>Collector</h4><p>A floor pad that picks up dropped items in an area. Replaces hoppers.</p></div>
+ <div class="card"><div class="how">Crafted</div><h4>Storage Crate</h4><p>One block holding 5 chests' worth. Filled by nodes and collectors only.</p></div>
+ <div class="card"><div class="how">Black Market · Ascended+</div><h4>Storage Remote</h4><p>Opens your claim's storage from anywhere inside that claim.</p></div>
+</div>
+</section>
+
+<section id="controller">
+<h2><span class="n">04</span> Controller &amp; terminal</h2>
+<p>Place the controller anywhere inside your claim; it needs build trust to place. Right-click it to open the terminal, titled <b>Seven's Storage</b>, showing every item you have stored with its total count.</p>
+<ul>
+<li><b>Put items in:</b> click items in your own inventory while the terminal is open.</li>
+<li><b>Take items out:</b> click an item in the terminal.</li>
+<li><b>Search:</b> use the search button. Java players type into an anvil screen; Bedrock players get a text form. Searching never costs XP.</li>
+<li><b>Crafting:</b> open the crafting screen from the terminal (see <a href="#crafting-screen">Crafting from storage</a>).</li>
+</ul>
+<div class="note"><b>Good to know</b><br>
+• One player uses a storage at a time; anyone else gets a message that it's in use.<br>
+• You need <b>container trust</b> in the claim to open someone else's storage.<br>
+• The controller <b>can't be broken while it holds items</b>. Empty it first.<br>
+• Staff opening a player's storage is logged.</div>
+</section>
+
+<section id="modules">
+<h2><span class="n">05</span> Storage modules</h2>
+<p>Modules add capacity. Each one must <b>touch the controller or another connected module</b>; a module floating on its own does nothing. Build them in a wall, a tower, or any shape you like as long as the chain is unbroken.</p>
+<p>Capacity = <b>5,000</b> (controller) + <b>25,000 × modules</b>. How many modules a claim can use depends on the <b>claim owner's rank</b>. See <a href="#ranks">Rank limits</a>.</p>
+<div class="tip"><b>Tip:</b> opening a module does nothing on purpose. Everything goes through the controller.</div>
+</section>
+
+<section id="crafting-screen">
+<h2><span class="n">06</span> Crafting from storage</h2>
+<p>The terminal's crafting screen shows <b>everything you can make right now</b> from what's in storage, next to a real crafting table.</p>
+<ul>
+<li><b>Click a recipe</b> on the left to load its ingredients into the grid. Click it again to add another set, just like the vanilla recipe book.</li>
+<li><b>Click the result</b> to craft what's in the grid.</li>
+<li><b>Shift + right-click the result</b> to craft as many as your stock allows.</li>
+</ul>
+<p>Ingredients come straight out of storage, so you never need to carry them. Only vanilla recipes and Seven's Storage's own recipes appear here.</p>
+</section>
+
+<section id="linker">
+<h2><span class="n">07</span> Wireless Linker</h2>
+<p>The linker is how everything gets connected. You "load" it by right-clicking one thing, then right-click the thing it should connect to. The action bar (or chat, for long messages) always tells you what's loaded.</p>
+<table>
+<tr><th>Right-click with the linker on…</th><th>What it does</th></tr>
+<tr><td>A Storage Controller</td><td>Loads that storage. Now click output nodes to pair them, or sneak + right-click a furnace to pair its whole group.</td></tr>
+<tr><td>A chest or barrel</td><td>Loads it as an <b>ore chest</b>. Sneak + right-click instead to load it as a <b>fuel chest</b>. Then click input nodes.</td></tr>
+<tr><td>A furnace (sneaking)</td><td>Pairs every node on that group of furnaces at once.</td></tr>
+<tr><td>A sending Transfer Node or Collector</td><td>Loads it as the sender. Then click the receiving transfer node or a Storage Crate.</td></tr>
+<tr><td>A Storage Crate</td><td>Loads the crate, ready to be picked as a filter destination in a node's menu.</td></tr>
+<tr><td>A Collector (sneaking)</td><td>Cycles its pickup size.</td></tr>
+</table>
+<div class="note"><b>Unpairing:</b> sneak + right-click a node with an <b>empty hand</b>.<br><b>Rules:</b> both ends must be inside claims, within <b>500 blocks</b>, in the same world, and you need <b>container trust</b> at both ends. If you lose trust, your links are cut automatically.</div>
+</section>
+
+<section id="output">
+<h2><span class="n">08</span> Output nodes</h2>
+<p>Place an output node flat against a chest, barrel, or other container. Once paired to your storage it <b>empties that container into storage</b>, up to 256 items a second.</p>
+<ol class="steps">
+<li>Place the node on the container (it snaps flat to the face you click).</li>
+<li>Right-click your controller with the linker, then right-click the node.</li>
+<li>The light turns <b>blue</b> and items start flowing.</li>
+</ol>
+<p>Right-click a node with an <b>empty hand</b> to open its menu: status, items moved, and its <a href="#filters">filter</a>. Great on mob-farm chests, crop farms and anything else that fills a chest.</p>
+</section>
+
+<section id="input">
+<h2><span class="n">09</span> Input nodes &amp; furnaces</h2>
+<p>Input nodes go on furnaces, blast furnaces and smokers. They keep the <b>input slot topped up to 16</b> and the <b>fuel slot to 8</b>, pulling from an ore chest and a fuel chest you choose.</p>
+<ol class="steps">
+<li>Put an input node on each furnace.</li>
+<li>Right-click your ore chest with the linker (loads <b>ORE</b>), then sneak + right-click a furnace to pair the whole group.</li>
+<li>Sneak + right-click your fuel chest with the linker (loads <b>FUEL</b>), then sneak + right-click a furnace again.</li>
+</ol>
+<div class="tip"><b>Furnace groups:</b> furnaces count as one group while there are no more than 2 blocks between them, so a sneak-click pairs your whole smelting array, but never a separate setup nearby. Pair the furnaces' <b>output</b> with output nodes to send smelted items straight to storage.</div>
+</section>
+
+<section id="transfer">
+<h2><span class="n">10</span> Transfer nodes</h2>
+<p>Transfer nodes move items <b>from one chest to another</b>, never into storage. Use them to double up ore and fuel chests, send farm output to a sell chest, or feed a Storage Crate.</p>
+<ol class="steps">
+<li>Put a transfer node on the <b>sending</b> chest and one on the <b>receiving</b> chest.</li>
+<li>Right-click the sending node with the linker, then the receiving node.</li>
+</ol>
+<p>Transfer nodes never pair themselves; you always choose both ends. If the receiving area isn't loaded, the sender holds up to <b>1,728 items</b> and delivers them when it loads again.</p>
+</section>
+
+<section id="collector">
+<h2><span class="n">11</span> Collector</h2>
+<p>The collector is a floor pad that replaces hoppers. It picks up items that drop in an area around it and reaching <b>4 blocks up</b>, and sends them to your storage. It doesn't tick: drops are grabbed the instant they appear, and anything that floats or falls in is swept up within a second.</p>
+<ul>
+<li><b>Placing:</b> inside your claim, on a solid floor. It pairs to the claim's storage automatically. Up to 32 per claim.</li>
+<li><b>Size:</b> 1×1 is always allowed; larger sizes depend on the claim owner's rank (see <a href="#ranks">Rank limits</a>). Change it in the menu or by sneak + right-clicking with the linker.</li>
+<li><b>Show the area:</b> open the menu and click <b>Show the area</b> to see a cyan outline of the pickup zone for 15 seconds. Only you see it.</li>
+<li><b>Holding:</b> it holds up to 1,728 items while sending. Breaking it drops what it's holding.</li>
+<li><b>Sending to a crate:</b> click the collector with the linker, then a Storage Crate. The crate becomes its <b>filtered items</b> destination; everything else still goes to storage.</li>
+</ul>
+<div class="warn"><b>Keep the floor solid.</b> Items fall straight through the pad, so put it on a solid block with solid floor around it, not over a hole.</div>
+</section>
+
+<section id="filters">
+<h2><span class="n">12</span> Filters</h2>
+<p>Output nodes, transfer nodes and collectors all have a filter. Right-click one with an <b>empty hand</b> to open its menu.</p>
+<ul>
+<li><b>Add an item:</b> click it in your own inventory. A copy goes in the filter; you keep your item. Up to 18 filter items.</li>
+<li><b>Remove one:</b> click it in the filter. <b>Clear</b> empties the whole filter.</li>
+<li><b>Plain items</b> (like bones) match every item of that type. <b>Named or custom items</b> match exact copies only.</li>
+<li><b>Where filtered items go:</b> right-click a chest or Storage Crate with the linker, then click the chest slot in the menu. Shift-click the slot to remove it.</li>
+</ul>
+<div class="note"><b>When the filter chest is full, or none is set:</b> collectors leave filtered items on the ground (they despawn normally after 5 minutes); output and transfer nodes leave them in the source container. Nothing is ever deleted.</div>
+<div class="tip"><b>Example:</b> an iron farm collector with poppies in the filter: iron goes to storage, poppies stay on the ground and despawn. A skeleton farm with bones in the filter and a crate set: bones go to the crate, arrows and bows to storage.</div>
+</section>
+
+<section id="crate">
+<h2><span class="n">13</span> Storage Crate</h2>
+<p>A single block that holds <b>5 chests' worth</b>: 3 pages of 45 slots. Open it like a chest and use the arrows to change pages.</p>
+<ul>
+<li><b>Take-out only.</b> Players can't put anything in. Only transfer nodes, collectors and filters fill it, so it can't be used as temporary storage.</li>
+<li>It receives items even while its area isn't loaded, and it never ticks.</li>
+<li>It <b>can't be broken until it's empty</b>.</li>
+<li>Perfect as a <b>sell chest</b>: send your mob drops here, empty it, <code>/sell</code>.</li>
+</ul>
+</section>
+
+<section id="remote">
+<h2><span class="n">14</span> Storage Remote</h2>
+<p><img class="remote-img" src="data:image/png;base64,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" alt="The Storage Remote, front view"></p>
+<p>A handheld terminal for <b>Ascended and Immortal</b> players, sold in the Black Market. <b>Right-click anywhere inside a claim</b> to open that claim's storage. No linking: walk into another of your claims and it opens that claim's storage instead.</p>
+<ul>
+<li>You need <b>container trust</b> in the claim, like at the controller.</li>
+<li>Doesn't work outside claims, in claims with no controller, in dungeons or in minigames.</li>
+<li>Right-clicking a controller or node with it just uses that block normally.</li>
+</ul>
+</section>
+
+<section id="lights">
+<h2><span class="n">15</span> Status lights &amp; colors</h2>
+<p class="lights"><span><i class="dot" style="color:#3fd0ff;background:#3fd0ff"></i><b>Blue</b> working</span><span><i class="dot" style="color:#ffb547;background:#ffb547"></i><b>Amber</b> waiting (storage full, nothing to send, receiver not loaded)</span><span><i class="dot" style="color:#ff5d6c;background:#ff5d6c"></i><b>Red</b> not paired</span></p>
+<p>Right-click a node with any item (not the linker) to see its status in chat. <b>Dye:</b> right-click any part with a dye to recolor it. Broken parts drop as a clean item that stacks with the others, and keep their color.</p>
+<div class="note">After a server restart, lights in areas that aren't loaded update the next time the area loads. They may show red until then even though the link is fine.</div>
+</section>
+
+<section id="recipes">
+<h2><span class="n">16</span> Crafting recipes</h2>
+<p>All parts except the Controller and Remote are crafted at a crafting table, or from your storage's crafting screen.</p>
+<div class="recipes" id="recipe-list"></div>
+<div class="note"><b>Black Market only:</b> the <b>Storage Controller</b> and the <b>Storage Remote</b> (Ascended &amp; Immortal) can't be crafted.</div>
+</section>
+
+<section id="ranks">
+<h2><span class="n">17</span> Rank limits</h2>
+<p>Limits go by the <b>claim owner's</b> rank, so a trusted friend building in your claim uses your limits.</p>
+<table>
+<tr><th>Rank</th><th>Modules per claim</th><th>Total storage</th><th>Collector size</th><th>Storage Remote</th></tr>
+<tr><td>Member</td><td class="num">20</td><td class="num">505,000</td><td class="num">3×3</td><td>–</td></tr>
+<tr><td>Disciple</td><td class="num">40</td><td class="num">1,005,000</td><td class="num">5×5</td><td>–</td></tr>
+<tr><td>Ascended</td><td class="num">120</td><td class="num">3,005,000</td><td class="num">7×7</td><td>✔</td></tr>
+<tr><td>Immortal</td><td class="num">200</td><td class="num">5,005,000</td><td class="num">9×9</td><td>✔</td></tr>
+</table>
+<p>Collectors: up to 32 per claim for every rank, 1×1 always allowed. If a rank ends, existing modules keep working but you can't add more above your new limit.</p>
+</section>
+
+<section id="claims">
+<h2><span class="n">18</span> Claims &amp; real estate</h2>
+<p>A storage belongs to its <b>claim</b>, not to a player. What happens when the claim changes:</p>
+<table>
+<tr><th>Event</th><th>What happens to the storage</th></tr>
+<tr><td>You abandon the claim</td><td>The storage goes "wild": it's locked and nobody can open it.</td></tr>
+<tr><td>Someone claims over a wild storage</td><td>They adopt it, items and all.</td></tr>
+<tr><td>Your claim expires</td><td>It's listed in the real estate shop. The terminal is locked while listed and unlocks for the buyer. A claim with a controller is priced <b>$300,000</b> higher.</td></tr>
+<tr><td>Staff delete the claim</td><td>The storage is wiped (staff keep a snapshot).</td></tr>
+</table>
+<div class="tip"><b>Moving house?</b> Empty the controller, break everything down and rebuild in your new claim. Modules, nodes and the controller all drop as items.</div>
+</section>
+
+<section id="faq">
+<h2><span class="n">19</span> FAQ &amp; troubleshooting</h2>
+<h3>"This claim already has a Storage Controller"</h3><p>Only one per claim. Use <code>/storage info</code> or ask staff if you can't find it.</p>
+<h3>I placed a module but my capacity didn't change</h3><p>It has to touch the controller or a connected module, and you may be at your rank's module limit.</p>
+<h3>My node's light is red</h3><p>It isn't paired. Pair it again with the linker. After a restart, lights in unloaded areas can show red until the area loads.</p>
+<h3>Amber light on an output node</h3><p>Your storage is full or locked. Add modules or clear space.</p>
+<h3>Items sit on my collector</h3><p>Check the area with <b>Show the area</b>, make sure the floor is solid, and that the item isn't in the filter. A collector holding 1,728 items stops picking up until it can send.</p>
+<h3>I can't put items in the Storage Crate</h3><p>That's by design. Only nodes and collectors fill it.</p>
+<h3>The remote says this claim has no storage</h3><p>The remote opens the storage of the claim you're standing in. Walk into the claim with your controller.</p>
+<h3>Bedrock players</h3><p>Everything works on Bedrock. Search uses a text form instead of the anvil.</p>
+</section>
+
+<section id="commands">
+<h2><span class="n">20</span> Commands</h2>
+<table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>/storage help</code></td><td>Lists the commands you can use.</td></tr>
+<tr><td><code>/storage info</code></td><td>Shows info about the storage part you're looking at.</td></tr>
+<tr><td><code>/storage search &lt;text&gt;</code></td><td>Searches your open storage from chat.</td></tr>
+</table>
+</section>
+
+<footer>
+<b style="color:var(--cyan)">Seven's Storage</b> · built for <b>Afterlife Zombies</b> · Made by Seven<br>
+<span style="font-size:12.5px">Minecraft item images © Mojang Studios, used under the Minecraft Usage Guidelines. Not an official Minecraft product.</span>
+</footer>
+</main>
+</div>
+
+<script>
+const ICON={ shulker_shell:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABgUlEQVR42u2bMWsCQRCFz2AXOAUDAVNJxBQRhGCbykJIdYQ06fxp/oKQwjZFsBVBMEgkURAuEFBQIfWl3i32MuzoEe573eDCrh/z3s2dZxAghPKsQtYHuG/3Esn6p1Ff9cwnee8AAOQdQDFrTz9Gd9ItEs1MwAIAYA7Q9bjU0+t4I1r/tpwa9df6x2tOwAIAIANknk/zuNTTvrIzYbaIjfpl/lygAwAAAL17gffx0qivbmqZfoHrWjNlRZS4MgELAIAM8FNaJmjPBfZ1nw4AAACOmwGV89CoN9971UzQ9jgdAAAA6GaA7XlpJoxXM6Ounp2K9r+8qDs//4w/6AAAAOCAGWB7eDfdGvVDp+vMBF+PD4avRl0Ky16ZggUAQAbItNtvnc/dS2HZeAZ322o5M8P27HAyEe0nfR+BDgAAAGQZYP/e3mlEySEPlOZ5OgAAAMh2DpB6Unp/7psZ0gzBAgAgA/63fOcELACAgPcEg2P+J8i+Tmt7mg4AAAAQQujP+gWV1os9h4KxPAAAAABJRU5ErkJggg==',ender_eye:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAB1klEQVR42u1bu0oDQRSdiKWIwWLURfFBCkHQ1fWF2MfSP1AM/oJYWIpYpvEn0gqxsBAsfG0MoiAYzEqC6AohFoKVrK33orMOO2vAPac7YdlZDvecufOIEAAAAAAAJBWpvx7QXssFX3nj8Ur5fO3gItZvbEt6BUCApAvQHrfHOfoHh5X8GwRxZgQsAAHQB5j1PPe07Hk3+sHu6ZNQ9RG6mQALQAD0AXoYyE5reX59dYXwl+ctwq89+n7fbxL+1nQId+Z6WSawD8zSviEsE2ABCIAMiAZdz9caacL3ts8Jn1/qJLzPcrUyoZAvoQIgAAQwmAF83u+2xpXPh3l+Z4N6/qNeIfykmImUCUOzU4R7bD/h9aacQgVAAAhgrg/oSFNPHrLeXEpUAASAAP85A/g8zDOhfOlHer89KZX7BXw8ISxUAASAACK+cwG+NphYWFbuD3CPSsn3A+haYHN3hvC7SpXw+9tF5XiF/L5Q9f6oAAgAAcz2AfWHKvuFn/c7jLvK9X6Y50dGjwk/KlqoAAgAAVp4P6BrzA5Ue3K/uAMkdM4d+P0A76ykNe+jAiAABIj3rjDPBA6eEWHgHufQ9TwqAAJAgNb+XyAsI0x7HBUAASAAAADAj/gEaIGO0L088J4AAAAASUVORK5CYII=',copper_ingot:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABmklEQVR42u2asUoDURBFV1GIYBohpSBCAoKpBbewstLSxkKwsPEHrP0H23yCpZ2FWFgIaRZEIYIKAS0CKsQiYBFb311447AxCey53bDLy+YyZ97s7EsShBBCCJVVM9P+gK3ttWHs+tHlQ6H/MFv2DMAAasCUMa2q16rR67dv/SA+ufLVBBDAgJJrbtxM72w0g7jz9BLEj1/f0bi+OB/EB2lTf2LoqQkggAH0AaPdpxurK9H7LeZz6wvz3vWtPgEEMKDsfYAyf7i3H9xwc33hYnDczNeW16Nxo3sX7RNAAAN4FwjVE2bSrd3odYt5L+PKsCWtUVaN6fYHZAAGYIBjHqCMWTWhKNO6nlVTlPl3YXypWiEDMAADCtSA3L4qNWHz+DQcMNy3C+3T2id4mbfWy8gADMCAQt8FlMF0wszrPp+9fkZ7/7P2MzNBDMCAXzVAz9i0ZGamc3+L6VEzr0xb7/fKOBmAARjg6wNyNUG/FS5UXDNCZf6803M9oJdpMgADMCD513OC1vmB7GMwUabJAAzAAIQQQgihP+kHlL2thmAlAVUAAAAASUVORK5CYII=',ender_pearl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABtElEQVR42u2bvUvDUBTFU6vooJRgC+rkB1RH61IXNxcRNwUnERcXUf+EDK4O3RyLs/+GYEGsmxj8AqEOraRFxaGUOr8LvnBpmgz9ne3ykryXwz33nftIHAcAAAAAg4pU3BOOF5e7muu/K/d9XePQoGcABAw6AcNxa3zpYNd6f6veMOIPx+n2s0YgAQigBkSrea3G6/6z9frprXXr+EvQNObv+G8pMgACIKB/vUCY5qXGD0+Pjbj8WDXiV69knW/EzVjHc/kFsyZcXjmamoAEIAAfEC3CNO8feZHOF+YjyAAIgIDefIB23x/dWLNqvvMZqBaYnnRNX5B1Vb7h66Zq9QVIAALwAXb8Bk3VPtyu3MX6AjPFlZ58ARKAAGqADnLfTxqZXJYagAQgIMYzwXR+1ugN5ve2jfFaiA9oN3S9gPT+c96JEY/dPhhx9fyCM0EkAAEJngnKfrwdtFT9vITU/P5iwYjPSmUyAAIgIMHvBKUvmNrZNMZ/3mvWmiD7eentJZ6uK47mzI8MgAAIiPdbYVkTJCZWC6rnSY1LaDVPBkAABCT7v0BYjYha42QABEAAAAD8iz+LHoZHxb6lZQAAAABJRU5ErkJggg==',gold_ingot:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABh0lEQVR42u2aMUvDQBTHr7aCS4eCToKdRJylBDdHUdrBT+Dg5CK4KDiIsy4uguAifoNgi4ObgoODq+IgHZyqFCkUQUwd5T3hznBtEsjvv70khNwv7//ueHfGIIQQQiivKmT9A8ONysB2v3HW9RrDWN4zAAB5B1DKmqe1lrcX7e8zdwOfmoAFAMA6IFlPrx43Rjqg5lYYa52ABQBADRjuPF2sTqU6oO92R8R7a1ciPnyMCmQAAADwWwO05+unD+KB6HM/239w4sB6X3//7sIFGQAAAFj6AV9PmyIenztJtCa4PO3y+Mv5pYhnlgIyAAAA8OgJao9pj7pqgq+n365bIu69RmQAAACQ4r7An3XCfFOZuJ2op8vT8h9WZmtkAAAA4FEDus/3Ip6srtjn7f56pjyue4Ba9ASxAABkDdB7Z6GRPcLAtLzm2bge1zraeVdX4nmcDAAAAIzX+QC9bxDUS9aaoNcRbk+boXqaDAAAAEZ7Rsh1fuDm9iNVT5MBAAAAQgghhNC/9ANnEnfTBcE4/wAAAABJRU5ErkJggg==',hopper:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABgElEQVR42u2ZwWqDQBRFY1OKBZEYhEIgi9B8hx8Q+rklq0LAL3BfSBYtklKJQQRn1+4C8xYzHXQiJefuHiYyHu573hknE4QQQgjdqoK+N9i8bH7GfIDt67bXM9zdugMAwAywKMsyrcejONKun6rTqA8wT+da3alOq3dvuwAHAAAAf58BsufTp1S7Xn6UxhsqpbwuOAxD4/XFcqHV+/e9VhdFEeAAAADgonvbD6qvythjUrLn+ipJE71OEqf1xnGMAwAAgAH3AlLTh6lWr5arQRd4bs9aXde1Xle1sefzPGcvAAAADHgmaDsfaJvW64LlzJEzQGZ9HAAAAPj9LmCbCeGjef+uOmU805Pq2/M4AAAAcDsPcJXs+Vk0M/9BHxmT4/fRaSbgAAAAYNwcYMsF6+e1035f5oLysxz0vY8DAAAAvznA1uMyF8j6UB9wAAAA8I9zgGsukNnf93sfBwAAANfNAbZc4Hu/jwMAAIBxc4AtFzRNc9X3Pg4AAAAQQuiiX7X5d+rrcU1mAAAAAElFTkSuQmCC',redstone:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABa0lEQVR42u2aMW7CMBhGTdUUFKliQV04Q/fMOQBbt14gc26B1LkXYOvWAzCzIZQz9AAVEuBGapj/b4gV4URIeW+LnBj04ffHNnYOAAAAAADGyGToD3yfuqatfeOH/U4PYx8BBDD2AB6Hdv7F2/Zsrso3zZA1AQUIgBrQr/OrmVX4zdtpwJc8//Nvr1+d7a+KPHdBAQKgBvTs/K84L+/9nbRvpf88kZpQx60JKEAA1IC4zivqvNYEJ+35ybYv9SeKXBNQgAAce4I3rec/As7re34vDm9re11Kf3p/kdr+12dbxvyf7TBUE1CAAJgHdEP38EpxPHOBGpG2P6/OK98Xe/9zY533jAACIICoNeDgdc/OOljMb1v/h97zn7I20D3D40SLRs0IIAAC6PF8gO7TLwIOh5zX9b46rqjzXef+jAACIIC4Z4S0JijTp6R17t7VcYX/BVCAAO77nGCoRoSoHGeEUIAAAAAAAHrgCoszbWVwagkDAAAAAElFTkSuQmCC',blaze_rod:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABXElEQVR42u2ZMWvCQBiGY5RCN5EuYv9Mpy6ZHHRwlEzi3yiF4thJECeJbiI46Bqwi4NuGVxKQKHQTh3Eoa5+EdRDk96R59s+zsF7eN/v3rtYFkVRaa6M6RsYNYp/h/3m61usu4PtyT3aaVcAANIOIGfaH/aaJeF556Ug1ifdrOjfV6H4fWMu5x4WAAA5wKxz3mm50vPtjuh/+6Hoy75FDgAAAAzKAUfn/FtdrAdjT/R3M+n5Z19trmEBAJADNDvnXx8i2f7npOefetftAQsAgByg230+Xs+jAAAAINkcEPV8NZLto/f5uD2PAgAAgHhngGq2V33DQwEAAIBeM+DI85W19PzyUSvPowAAAOC69wDV7/O6eR4FAAAAajnA9HMeBQAAAGo5YFjLn7nPZ2/6fR4FAAAAes0AO38v+mC6/dd3exQAAAAkOwM+P2TW3y3WRmV7FAAAAFAURV1ce+qIb4pue81HAAAAAElFTkSuQmCC',diamond:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABr0lEQVR42u2bIUhDURSG7/QxtGwoA8OSICILlo0VBaNB2wSLLFjsikGLGFxTs8VgWxCTNrEZxhwmg1EZljHZJggymE04R7hwee++hX1/O7vc9y7fzvnPvXtvxiCEEEJoVJXwfYOp3cNBmPmfZxWvaxwb9QwAwKgDCHzXfPv0xGn+i/kW8bIxA5+eQAkAAA/wW/Nr7Vfr/M1UWsSFICXidGlJxOOtkrhf6+o6QQYAAADxeYBrzesa19I1X+93RZxbmJP7hJ1tfYlQnkAJAAAP8KtyMGPd6+fMpHVFVdOxekKNDAAAALx6gGvfv52eD3UW0Hq+b4g4mZX7huT6hogzjvsCSgAAeEC00n3eteb/fUMfPfmB8gAyAAAAGK4H6L4/+3gn4uNi3ul61W7HOv7T7JIBAADAED1A9/n99rv1vH5w8xBqgclC1jrerzfJAAAAwMT3jlCmLJ/NFc8rTud3V+m+r6/3dXFpeC5ACQBgeGeBt94g1gXrs8We8gAyAAAAiPddYb0vmMivivHFrRUT5jfCo9pTpH2fDAAAAPz+X0B7QtQKW/NkAAAAgBBCf/oFHyl0fw/ZLhYAAAAASUVORK5CYII=',diamond_block:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAJjElEQVR42u1b329bZxl+jo99ftiL02RZ16bK0oxVVB0p0AqhRWMCDcEFlSaVG2652CREEbtA41+AqWhUm1TUC7iYkAYSaBOdxBBo0pK2gsahNE2bLVFTL22Srm6c2LF9zrFPDhfH7+fvO7/8o3baaXml6vzocXye533e532/YxvYjd3YjS9ySA/rjZ/46KJD+/demJC+MAT84P6Kwx//Z+4WHiYR0sMC//rgHnb+25NXhOt2kogdeaNv3brDgP9udCD0Op6InSJB2ingAHD4iW22n1L62P7LcQX/dkrs+JdTCztGhLQT4HngK4YsXHconWT7R+WqQIJpVNhx4XsvSp8LAnjgP35KYecvVQzM34ux4+MHUsLrSlaR7fPX/e+TeeG6bhMh9cLgCkVHAP+HTy22n+6TQhWwUCiD/xt88ER0kwSp222Nd/fX1jcEQDx4HniUArykdbttSr1oawDw2/L9wLof1mzhuud0je3/JV8NVQDvI+9mlrvWNqVutzXezS9VjFDz++FAQjgOu9arHJ7AP1345IH9QXqQtsbXuTeu2onA2m5VAd7gS6ZkFQWSJjM3OiZB6kTufPa+KaV6qoAoInhiO/UHqR3g5wf3N5zdyQlZ5nt4OwrgByLeCFcMWbiWV8pVOyFcy0e7/iC16u48+FfKt9n+q8nHW1YAD4gH7gUfFVElw6vj9x9mWioLqZ22xju7F0SUAqKAhikgCnhUyRxKJ4V7efWfVyOJ8J2Y+PvfHAAY+MZxgYQj0AMV4L2xKBJ4gO0owAswzAPCFAAA2//4AFunX2+dAAqeCG8Z7KQCWiUspfThj5eus+N901MAgKWVXCAB8bA3PJV+DG8VtpC/nGEknFhfZQ7uZj68bR2Vqx0rwDs4rRgyYJR9JurtFnwXIOAAcDKl4zch9xmPMhyeBACQDx9zO0DRipwBwhSQUvoYUNqyEtI1n6kVig4KxRgAR5gEveD5OUDVdPRPTQKahJMpvamphhJwECpuwcTptOvyvyjcR2HGJSJ97Dhb4IRNgs0UEGRqw1r4WoAAkwKGNds3Ce6dnnaz3+fgRSXZUleJRf3nQaj4lXkPAHA6/ThO7HMBMSL6JLy2viEsemgwClMAD5h38ud0DSuGjBVD9q0YC0UHw5otyP/dzDJUTYeq6dg7PS2AB4Ap28aU7V6/5FitK6BUrntgunGOSBhXFUbC+ZkM7KTE/IFIoAmvVwrg67x/arJh3oNx3Ky6JbRZjWFvvUKiwEcq4H1ssn097spp0Y5j0XY5IyLylzPIX87U69UR1v5H5arQHR5EAZOZG5jM3GBPicjkJgbjmBh072mtKGGzGmtrMRRpgu9jk4HX40m8JMfxnl3Ds9AwBwOn0o8BAN4qbMGen2FGSSQ0jMsQDLBdBfAPQ0avZYSsA8DF9VrDBzTXnE27Tm4sgYvrNdSq1dYISCX9U+Mzco1d/pLsvoRIeBaaQERhJoP0seMCkHSfVG9jjXGYsk+qSCkJNtik+9yshwEnd/9rqfHMUNf8971ZjeFisdaZAghgAzwwB8N3HZ0jIn5dLgrdwrump1r2PhHipzqqc1XTYRoV1+A8be1fVolVMIGn7BP4By4BIiEqFu04npFreMcs4EdqumGSa1WBCO8Tnkyx5Ptb859mhWMyuYnBOMYkJdTU+hONGYGkXzGkSHW01QWiwDe2Ft4xC8iZMXwnHceJfQnMmhayeUkoi6DnfGFyr3B1zgO/sy37ptCnEwkANm7alH1HAB9PJNpTANU3n2V+S1GplX2vPb/m3tzoADA64N5IdiaDVFJi0yQpgrKuarowvp5K9eNCcgsAMCYpjAAXfEPi/YntOnjgZrXqkz6vjrZLYA6GJ8vwgc+ZMQyp22xLRloqO8jmpToRDkYHHORMiXWLBc9zBAJ/KtUvZPp5WRayz9wdsabg3Ow7nRPQLPR4EjAN5EyXddry3aRUdhg5fLeozl0DAIxUNoSsA8DbVt5Vhaz5Mg+IWQ7Lvq5J2KspjLCwNhhqlbOm1RIJQ+o2y3zQOSIiZ8bwnl1jiyw+TqZ0nEzpeNvKC+Cfl8XVnmkbPunf2ZbZBCisC+odYbMai+wIkQqYNS3ocVHyejwpbHnQlOlxVcGsaWEkpbWspmEoAEoMvNf4KJO87Buq6DxCqcmZMSbpSq3MwHq33syPqwpbN/AzRNQs4YJvxIGYjQMxm4G8sy1DlTVGDE9SwxMa5Hw96Sem7S4Q5fI+HxCi5psiyTgrtTIgK6GzRQOgHfj/PNigYx58QzHovgmSxP3g3S5RqZXZNW4095MLzhYAmWXeK3ECxKugWWxW3U4R9ZrQEiiVHTYUjauK8C9K4qSYWdPydYecGWMzArvecOrgIYBvFt7sb1ZjgR2BwLfdBci99XhS6P1hgHmf8HoJbYnQ82tVWJYZCbCd7BPYoI7A+0lLBGTvriF7d42RMH+v4huASNqU5WY+ERY8CTTrNwNv2kZg7Qe1PTr35xu3Wydg4yevSABwfWkV15fcp8DLJYMB9oL3DkDertBsua1rkgA+KiiTPMjNaowNPHyr9II3zrwhtf3Z4J6z5xzLMqEoKo6M7Rf6Pe8VPKgg0EEEXfnYXfJ+ya6wZe6SYwVmP6i2K4bDFjrU/sj0AOBKdp3Vfhj4pl2A1KCcPedcX1rFkbH9rJZp3udXkPzUF0REGEFB4INGXQIetNAhYgg4gMAPQjr+eHzP2XPsnUef3Idm5smDHVcVfFioYSSlMb/4aP4uLMvEcKnMlrxEAF/j3uwTAbomCZlfyK6ygacV4B1/Q4TKAgAOjYwyJfDAaQT2tkmaEYgAABjK50MJCJM+//gbAKYX70bWecefC4SVRfnnP5MAYGE5y7JO2R5StxnIoPbJj9h83Azp07z0qe6p9q9k15nkOwHflW+JJc+86QDAd48+FTom85Mhgb/y8S0oioqhfF7IJp95APhv2RYyr2sSFrKrbLZvR+49+55g8sybjqKoAIAXDj/JQHoNj888dYHhUtnn5rTMpeUvb3y36zNKpxnv6TdFySgty8TXvnwwsG3ScRQBNPR8ZlgMfLeB9/S7wlQWQSRQJ+C7QNBj7c8Md+Aid+8F+J5+WZpI4P2BXz1+cG2JdQHWXveoyG6Y0DUJSyu5lgaZR/73Arw/fP8rY+z5gJcAXZOY3NfW73fF4B6pX4yQP/z0qyMAgDcuL7IuQCXQ6TDzufrNEF8aZIKU8V7L/ZH51RhPQmx5ecfk/siFVw27sRu7sRs7Hf8HfbcC/BgIsjUAAAAASUVORK5CYII=',redstone_block:'data:image/png;base64,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',dropper:'data:image/png;base64,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',chest:'data:image/png;base64,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' };
+const NAMES={shulker_shell:'Shulker Shell',ender_eye:'Eye of Ender',copper_ingot:'Copper Ingot',ender_pearl:'Ender Pearl',gold_ingot:'Gold Ingot',hopper:'Hopper',redstone:'Redstone Dust',blaze_rod:'Blaze Rod',diamond:'Diamond',diamond_block:'Block of Diamond',redstone_block:'Block of Redstone',dropper:'Dropper',chest:'Chest'};
+const RECIPES=[
+ ['Storage Module','+25,000 storage',["SES","CDC","CRC"],{S:'shulker_shell',E:'ender_eye',C:'copper_ingot',D:'diamond_block',R:'redstone_block'}],
+ ['Output Node','Sends a container\'s items to storage',[" E ","GHG"," R "],{E:'ender_pearl',G:'gold_ingot',H:'hopper',R:'redstone'}],
+ ['Input Node','Feeds ore and fuel to furnaces',[" E ","GDG"," R "],{E:'ender_pearl',G:'gold_ingot',D:'dropper',R:'redstone'}],
+ ['Transfer Node','Moves items chest to chest',[" E ","GCG"," R "],{E:'ender_pearl',G:'gold_ingot',C:'chest',R:'redstone'}],
+ ['Collector','Lag-free hopper replacement',["GEG","HHH","GRG"],{G:'gold_ingot',E:'ender_eye',H:'hopper',R:'redstone'}],
+ ['Storage Crate','Holds 5 chests, take-out only',["CEC","CDC"," C "],{C:'chest',E:'ender_eye',D:'diamond'}],
+ ['Wireless Linker','Pairs everything together',[" E "," B "," G "],{E:'ender_pearl',B:'blaze_rod',G:'gold_ingot'}],
+];
+const CUBE='<svg class="cube" viewBox="0 0 48 48"><path d="M24 4 44 15 24 26 4 15Z" fill="#1e5a78" stroke="#3fd0ff" stroke-width="2"/><path d="M4 15 24 26 24 46 4 35Z" fill="#143c55" stroke="#3fd0ff" stroke-width="2"/><path d="M24 26 44 15 44 35 24 46Z" fill="#0e2c40" stroke="#3fd0ff" stroke-width="2"/><circle cx="24" cy="34" r="3" fill="#9be8ff"/></svg>';
+const list=document.getElementById('recipe-list');
+for(const [name,sub,shape,ing] of RECIPES){
+  let cells='';
+  for(const row of shape) for(const ch of row.padEnd(3)){ const it=ing[ch]; cells+='<div class="slot">'+(it?'<img src="'+ICON[it]+'" alt="'+NAMES[it]+'" title="'+NAMES[it]+'">':'')+'</div>'; }
+  let li='';
+  for(const [ch,it] of Object.entries(ing)){ const n=shape.join('').split(ch).length-1; li+='<li><img src="'+ICON[it]+'" alt="">'+n+'× '+NAMES[it]+'</li>'; }
+  list.insertAdjacentHTML('beforeend','<div class="recipe"><h4>'+name+'</h4><div class="sub">'+sub+'</div><div class="table"><div class="cgrid">'+cells+'</div><div class="arrow"></div><div class="slot result">'+CUBE+'</div></div><ul class="ing">'+li+'</ul></div>');
+}
+// search: filters the menu and jumps to the first matching section
+const q=document.getElementById('q'), links=[...document.querySelectorAll('nav a[href^="#"]:not(.brand)')];
+q.addEventListener('input',()=>{
+  const t=q.value.trim().toLowerCase();
+  for(const a of links){
+    const sec=document.querySelector(a.getAttribute('href'));
+    const hit=!t||a.textContent.toLowerCase().includes(t)||(sec&&sec.textContent.toLowerCase().includes(t));
+    a.classList.toggle('hide',!hit);
+  }
+});
+q.addEventListener('keydown',e=>{ if(e.key==='Enter'){ const a=links.find(l=>!l.classList.contains('hide')); if(a){ location.hash=a.getAttribute('href'); document.querySelector('nav').classList.remove('open'); } } });
+// highlight the section in view
+const obs=new IntersectionObserver(es=>{ for(const e of es) if(e.isIntersecting){ links.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id)); } },{rootMargin:'-30% 0px -65% 0px'});
+document.querySelectorAll('section[id]').forEach(s=>obs.observe(s));
+links.forEach(l=>l.addEventListener('click',()=>document.querySelector('nav').classList.remove('open')));
+</script>
+</body>
+</html>
